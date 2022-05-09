@@ -18,7 +18,7 @@ export default function Home() {
 
     React.useEffect(() => {
         const collectionRef = collection(database, 'products');
-        const q = query(collectionRef);
+        const q = query(collectionRef, orderBy('createdAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, querySnapshot => {
         console.log('querySnapshot unsusbscribe');
@@ -28,6 +28,8 @@ export default function Home() {
                 emoji: doc.data().emoji,
                 name: doc.data().name,
                 price: doc.data().price,
+                isSold: doc.data().isSold,
+                createdAt: doc.data().createdAt,
             }))
           );
         });
@@ -36,8 +38,10 @@ export default function Home() {
 
     return(
         <RN.View style={styles.container}>
+            <RN.ScrollView contentContainerStyle={{paddingBottom: 100}}>
             <RN.Text style={styles.title}>Products</RN.Text>
-            {products.map((product, index) => <Product key={product.id} {...product} />)}
+                {products.map(product => <Product key={product.id} {...product} />)}
+            </RN.ScrollView>
         </RN.View>
     )
 }
@@ -45,7 +49,7 @@ export default function Home() {
 const styles = RN.StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#F5F3F9',
     },
     title: {
         fontSize: 32,

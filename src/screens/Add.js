@@ -2,14 +2,18 @@ import * as React from 'react';
 import * as RN from 'react-native';
 import { collection, addDoc } from 'firebase/firestore';
 import { database } from '../../config/fb';
+import { useNavigation } from '@react-navigation/native';
 import EmojiPicker from 'rn-emoji-keyboard';
 
 export default function Add() {
+    const navigation = useNavigation();
     const [isOpen, setIsOpen] = React.useState(false);
     const [newItem, setNewItem] = React.useState({
         emoji: '📷',
         name: '',
         price: 0,
+        isSold: false,
+        createdAt: new Date(),
     });
 
     const handlePick = (emojiObject) => {
@@ -27,7 +31,7 @@ export default function Add() {
 
     const onSend = async () => {
         const docRef = await addDoc(collection(database, 'products'), newItem);
-        console.log(docRef.id)
+        navigation.goBack();
       }
 
     return(
