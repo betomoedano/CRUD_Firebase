@@ -11,15 +11,13 @@ import { database } from '../../config/fb';
 
 export default function Add() {
 
-    const onSend = () => {
+    const onSend = async () => {
         const newData = {
-            prduct: 'hello',
+            product: 'hello',
             price: 'world'
         }
-        addDoc(collection(database, 'products'), {
-            product: newData.prduct,
-            price: 'hello',
-        });
+        const docRef = await addDoc(collection(database, 'products'), newData);
+        console.log(docRef.id)
       }
 
     return(
