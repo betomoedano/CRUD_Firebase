@@ -3,6 +3,7 @@ import * as RN from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { database } from '../../config/fb';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import Product from '../components/Product';
 
 export default function Home() {
 
@@ -23,21 +24,32 @@ export default function Home() {
         console.log('querySnapshot unsusbscribe');
           setProducts(
             querySnapshot.docs.map(doc => ({
-             price: doc.data().price,
+                id: doc.id,
+                emoji: doc.data().emoji,
+                name: doc.data().name,
+                price: doc.data().price,
             }))
           );
         });
     return unsubscribe;
     },[])
 
-
-
     return(
-        <RN.View>
-            <RN.Text>This is the home screen</RN.Text>
-            {products.map((product, index) => (
-                <RN.Text key={index}>{product.price}</RN.Text>
-            ))}
+        <RN.View style={styles.container}>
+            <RN.Text style={styles.title}>Products</RN.Text>
+            {products.map((product, index) => <Product key={product.id} {...product} />)}
         </RN.View>
     )
 }
+
+const styles = RN.StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        margin: 16,
+    },
+});
